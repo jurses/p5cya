@@ -1,13 +1,13 @@
 #ifndef DFA_H
 #define DFA_H
 
-#include <vector>
+#include <set>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include "state.hpp"
 
-typedef std::vector<State> transcition_t;
+typedef std::set<State> transcition_t;
 
 namespace CYA{
     class Dfa{
@@ -17,8 +17,10 @@ namespace CYA{
         int totalStates_;
         bool optimaze_;
         transcition_t transcition_;
+        int funcTrans(int, char);
+        
     public:
-        Dfa(std::ifstream&, bool = false);  // el segundo parámetro indica si se quiere indicar los estados de muerte antes
+        Dfa(std::ifstream&, bool);  // el segundo parámetro indica si se quiere indicar los estados de muerte antes
         std::ostream& showDFA(std::ostream&);
         bool analyzeString(std::string);
         std::ostream& showStatesDeath(std::ostream&);

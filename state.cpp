@@ -17,4 +17,8 @@ namespace CYA{
 	State::operator int(){
 		return id_;
 	}
+
+	bool State::operator<(const State& q)const{
+		return id_ < q.id_;
+	}
 }
