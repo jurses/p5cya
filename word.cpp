@@ -100,17 +100,25 @@ namespace CYA{
 		return empty_;
 	}
 
-	int Word::operator>>(const char *str){
-		word_ = str;
-		assert(badWord());
-		return word_.size();
-	}
-
 	const char Word::operator[](int i){
 		return word_[i];
 	}
 
 	bool Word::badWord(void){
+		for(int i = 0; i < word_.size(); i++)
+			if(!alphabet_.checkChar(word_[i]))
+				return false;
+		
+		return true;
+	}
 
+	int Word::size(void){
+		return word_.size();
+	}
+
+	std::istream& operator>>(std::istream& is, Word& w){
+		is >> w.word_;
+		assert(w.badWord());
+		return is;
 	}
 }

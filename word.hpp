@@ -3,7 +3,7 @@
 
 #include <string>
 #include <cmath>
-#include <ostream>
+#include <iostream>
 #include "alphabet.hpp"
 
 namespace CYA{
@@ -13,6 +13,7 @@ namespace CYA{
 		std::string word_;
 		bool empty_;	// indica si es la cadena vacía
 		bool badWord(void);
+
 	public:
 		Word();
 		Word(const Alphabet&);
@@ -27,10 +28,9 @@ namespace CYA{
 		void concatenate(Word);
 		void invert(void);
 		bool isEmpty(void);
-		int operator>>(const char*);
+		friend std::istream& operator>>(std::istream&, Word&);
 		const char operator[](int);
-
-
+		int size(void);
 		std::ostream& write(std::ostream&);
 		operator std::string();
 	};

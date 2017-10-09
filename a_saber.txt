@@ -1,0 +1,1 @@
+las funciones amigas definidas dentro de una clase no pertencen a la clase

@@ -28,4 +28,12 @@ namespace CYA{
 
 		ifs.close();
 	}
+
+	bool Alphabet::checkChar(const char c)const{
+		for(std::set<char>::iterator it = setAlphab_.begin(); it != setAlphab_.end(); it++)
+			if(*it == c)
+				return true;
+		
+		return false;
+	}
 }

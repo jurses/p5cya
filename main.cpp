@@ -1,9 +1,19 @@
-#include "dfa.hpp"
+//#include "dfa.hpp"
 #include <iostream>
 #include <fstream>
+#include "alphabet.hpp"
+#include "word.hpp"
 using namespace CYA;
 
+void menu(void);
+
 int main(void){
-	std::ifstream ifs("ejemplo.dfa", std::ifstream::in);
-	Dfa a(ifs);
+	Alphabet A;
+	Word W(A);
+
+	std::cin >> W;
+}
+
+void menu(void){
+	
 }

@@ -47,7 +47,7 @@ namespace CYA{
         is >> str2Analyze_;
         return is;
     }
-
+    
     bool Dfa::accepted(void){
         int qState = start_;
         for(int i = 0; i < str2Analyze_.size(); i++){
