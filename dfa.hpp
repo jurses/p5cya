@@ -6,24 +6,28 @@
 #include <fstream>
 #include <string>
 #include "state.hpp"
+#include "word.hpp"
 
-typedef std::set<State> transcition_t;
+typedef std::set<CYA::State> transcition_t;
 
 namespace CYA{
     class Dfa{
     private:
-        void openFile(std::ifstream&);
+        void openFile(std::ifstream&, bool);
         int start_;
         int totalStates_;
         bool optimaze_;
         transcition_t transcition_;
-        int funcTrans(int, char);
+        int funcTrans(int, const char);
+        Word str2Analyze_;
         
     public:
         Dfa(std::ifstream&, bool);  // el segundo parámetro indica si se quiere indicar los estados de muerte antes
+        Dfa(std::ifstream&);
         std::ostream& showDFA(std::ostream&);
-        bool analyzeString(std::string);
+        std::istream& putString(std::istream&);
         std::ostream& showStatesDeath(std::ostream&);
+        bool accepted(void);
     };
 }
 

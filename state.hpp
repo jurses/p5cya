@@ -13,11 +13,11 @@ namespace CYA{
 		
 	public:
 		State(int, bool);   // id, acceptance
-		operator int();
+		int getID(void)const;
 		bool operator<(const State&)const;
 		void setAdj(char, int);
-		int getNextS(char);
-	}
+		int getNextS(const char)const;
+	};
 }
 
 #endif  // STATE_H

@@ -7,14 +7,14 @@ namespace CYA{
 	{}
 	
 	void State::setAdj(char t, int q){
-		adjacency[t] = q;
+		adjacency_[t] = q;
 	}
 
-	int State::getNextS(char t){
-		return adjacency_[t];
+	int State::getNextS(const char t)const{
+		return adjacency_.at(t);
 	}
 
-	State::operator int(){
+	int State::getID(void)const{
 		return id_;
 	}
 
