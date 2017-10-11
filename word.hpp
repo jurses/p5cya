@@ -31,6 +31,7 @@ namespace CYA{
 		friend std::istream& operator>>(std::istream&, Word&);
 		const char operator[](int);
 		int size(void);
+		Alphabet obtAlphabet(void)const;
 		std::ostream& write(std::ostream&);
 		operator std::string();
 	};

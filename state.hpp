@@ -15,8 +15,10 @@ namespace CYA{
 		State(int, bool);   // id, acceptance
 		int getID(void)const;
 		bool operator<(const State&)const;
+		bool operator==(const int)const;
 		void setAdj(char, int);
 		int getNextS(const char)const;
+		bool isAceptance(void)const;
 	};
 }
 

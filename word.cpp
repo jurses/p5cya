@@ -121,4 +121,8 @@ namespace CYA{
 		assert(w.badWord());
 		return is;
 	}
+
+	Alphabet Word::obtAlphabet(void)const{
+		return alphabet_;
+	}
 }
