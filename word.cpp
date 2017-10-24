@@ -1,98 +1,73 @@
 #include "word.hpp"
 #include <iostream>
+
 namespace CYA{
 	Word::Word(){
-		word_.resize(0);
+		wordStr_.resize(0);
 		empty_ = true;
 		assert(badWord());
 	}
 
-	Word::Word(const Alphabet& A)
-	{
-		alphabet_ = A;
-		assert(badWord());
-	}
-
-	Word::Word(char c){
-		if(c == '&')
-			empty_ = true;
-
-		word_.push_back(c);
-		assert(badWord());
-	}
-
-	Word::Word(const std::string& ws){
-		word_ = ws;
-		empty_ = false;
-		assert(badWord());
-	}
-
-	Word::Word(const Word& w){
-		alphabet_ = w.alphabet_;
-		word_ = w.word_;
-		empty_ = w.empty_;
-	}
-
 	const char* Word::obtWord(void)const{
-		return word_.c_str();
+		return wordStr_.c_str();
 	}
 
-	Word& Word::operator=(const Word& word){
-		word_ = word.word_;
-		empty_ = word.empty_;
+	Word& Word::operator=(const Word& wordStr){
+		wordStr_ = wordStr.wordStr_;
+		empty_ = wordStr.empty_;
 		assert(badWord());
 		return *this;
 	}
 
-	Word& Word::operator=(const char* word){
-		word_ = word;
+	Word& Word::operator=(const char* wordStr){
+		wordStr_ = wordStr;
 		assert(badWord());
 		empty_ = false;
 		return *this;
 	}
 
-	bool Word::operator<(const Word& word)const{	// necesario, promete al compilador no tocar el word
-		if(word_.size() != word.word_.size())
-			return word_.size() < word.word_.size();
+	bool Word::operator<(const Word& wordStr)const{	// necesario, promete al compilador no tocar el wordStr
+		if(wordStr_.size() != wordStr.wordStr_.size())
+			return wordStr_.size() < wordStr.wordStr_.size();
 
-		for(int i = 0; i < word_.size(); i++)
-			if(word_[i] != word.word_[i])
-				return word_[i] < word.word_[i];
+		for(int i = 0; i < wordStr_.size(); i++)
+			if(wordStr_[i] != wordStr.wordStr_[i])
+				return wordStr_[i] < wordStr.wordStr_[i];
 		
 		return false;	// es la misma palabra
 	}
 
 	void Word::invert(void){
 		char swapTemp;
-		for(int i = 0; i < word_.size()/2; i++){
-			swapTemp = word_[i];
-			word_[i] = word_[word_.size() - 1 - i];
-			word_[word_.size() - 1 - i] = swapTemp;
+		for(int i = 0; i < wordStr_.size()/2; i++){
+			swapTemp = wordStr_[i];
+			wordStr_[i] = wordStr_[wordStr_.size() - 1 - i];
+			wordStr_[wordStr_.size() - 1 - i] = swapTemp;
 		}
 	}
 
 	Word::operator std::string(void){
-		return word_;
+		return wordStr_;
 	}
 
 	void Word::concatenate(Word w){
 		if(!empty_)
-			word_ += w;
+			wordStr_ += w;
 		else
-			word_ = w;
+			wordStr_ = w;
 		
 		assert(badWord());
 	}
 
 	bool Word::operator==(const Word& w)const{
-		if(word_.compare(w.word_) == 0)
+		if(wordStr_.compare(w.wordStr_) == 0)
 			return true;
 		else
 			return false;
 	}
 
 	std::ostream& Word::write(std::ostream& os){
-		os << word_;
+		os << wordStr_;
 		return os;
 	}
 
@@ -101,28 +76,24 @@ namespace CYA{
 	}
 
 	const char Word::operator[](int i){
-		return word_[i];
+		return wordStr_[i];
 	}
 
 	bool Word::badWord(void){
-		for(int i = 0; i < word_.size(); i++)
-			if(!alphabet_.checkChar(word_[i]))
+		for(int i = 0; i < wordStr_.size(); i++)
+			if(!alphabet_.checkChar(wordStr_[i]))
 				return false;
 		
 		return true;
 	}
 
 	int Word::size(void){
-		return word_.size();
+		return wordStr_.size();
 	}
 
 	std::istream& operator>>(std::istream& is, Word& w){
-		is >> w.word_;
+		is >> w.wordStr_;
 		assert(w.badWord());
 		return is;
-	}
-
-	Alphabet Word::obtAlphabet(void)const{
-		return alphabet_;
 	}
 }
