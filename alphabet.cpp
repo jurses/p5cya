@@ -14,7 +14,7 @@ namespace CYA{
 		ifs.close();
 	}
 
-	const std::set<char> Alphabet::obtSet(void){
+	std::set<char> Alphabet::obtSet(void){
 		assert(!setAlphab_.empty());	// el alfabeto no puede estar vacío
 		return setAlphab_;
 	}

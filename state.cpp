@@ -37,4 +37,31 @@ namespace CYA{
 	bool State::operator<(const State& q)const{
 		return id_ < q.id_;
 	}
+
+	bool State::isAcceptance(void)const{
+		return acceptance_;
+	}
+
+	bool State::isDeath(void)const{
+		for(transS_t::iterator it = adjacency_.begin(); it != adjacency_.end(); it++)
+			if(id_ != obtainFirst(it->second))
+				return false;
+		return true;
+	}
+
+	std::ostream& State::showTrans(std::ostream& os)const{
+		for(transS_t::iterator it = adjacency_.begin(); it != adjacency_.end(); it++)
+			os << adjacency_.size() << ' ' << it->first << ' ' << obtainFirst(it->second) << ' ';
+		return os;
+	}
+
+	bool State::operator==(State q)const{
+		return q.id_ == id_;
+	}
+
+	std::ofstream& State::writeFS(std::ofstream& ofs)const{
+		for(transS_t::iterator it = adjacency_.begin(); it != adjacency_.end(); it++)
+			ofs << adjacency_.size() << ' ' << it->first << ' ' << obtainFirst(it->second) << ' ';
+		return ofs;
+	}
 }

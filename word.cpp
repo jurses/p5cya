@@ -5,23 +5,27 @@ namespace CYA{
 	Word::Word(){
 		wordStr_.resize(0);
 		empty_ = true;
-		assert(badWord());
+		assert(goodWord());
 	}
 
 	const char* Word::obtWord(void)const{
 		return wordStr_.c_str();
 	}
 
+	void Word::setAlphabet(Alphabet& A){
+		alphabet_ = A;
+	}
+
 	Word& Word::operator=(const Word& wordStr){
 		wordStr_ = wordStr.wordStr_;
 		empty_ = wordStr.empty_;
-		assert(badWord());
+		assert(goodWord());
 		return *this;
 	}
 
 	Word& Word::operator=(const char* wordStr){
 		wordStr_ = wordStr;
-		assert(badWord());
+		assert(goodWord());
 		empty_ = false;
 		return *this;
 	}
@@ -56,7 +60,7 @@ namespace CYA{
 		else
 			wordStr_ = w;
 		
-		assert(badWord());
+		assert(goodWord());
 	}
 
 	bool Word::operator==(const Word& w)const{
@@ -79,21 +83,32 @@ namespace CYA{
 		return wordStr_[i];
 	}
 
-	bool Word::badWord(void){
-		for(int i = 0; i < wordStr_.size(); i++)
-			if(!alphabet_.checkChar(wordStr_[i]))
-				return false;
-		
+	bool Word::goodWord(void){
+		if(!empty_)
+			for(int i = 0; i < wordStr_.size(); i++)
+				if(!alphabet_.checkChar(wordStr_[i]))
+					return false;
+					
 		return true;
 	}
 
 	int Word::size(void){
-		return wordStr_.size();
+		if(empty_)
+			return 0;
+		else
+			return wordStr_.size();
 	}
 
 	std::istream& operator>>(std::istream& is, Word& w){
-		is >> w.wordStr_;
-		assert(w.badWord());
+		std::string wAux;
+		is >> wAux;
+		w.wordStr_ = wAux;
+		if(wAux.size() == 1 && wAux[0] == '~')
+			w.empty_ = true;
+		else
+			w.empty_ = false;
+
+		assert(w.goodWord());
 		return is;
 	}
 }
