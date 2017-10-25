@@ -64,4 +64,8 @@ namespace CYA{
 			ofs << adjacency_.size() << ' ' << it->first << ' ' << obtainFirst(it->second) << ' ';
 		return ofs;
 	}
+
+	void State::addTrans(State q){
+		adjacency_ = q.adjacency_;
+	}
 }

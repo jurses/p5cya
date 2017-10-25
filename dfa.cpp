@@ -52,6 +52,8 @@ namespace CYA{
             for(int i = 0; i < str2Analyze_.size(); i++){
                 std::cout << qState << '\t' << str2Analyze_[i] << '\t' << funcTrans(qState, str2Analyze_[i]) << std::endl;
                 qState = funcTrans(qState, str2Analyze_[i]);
+                if(qState == -1)
+                    return false;
             }
         else
             std::cout << "Tratamos la cadena vacía" << std::endl;
@@ -99,7 +101,20 @@ namespace CYA{
 		do{
 			oldP = p;
 			p = createNewPartition(oldP);
-		}while(comparePart(oldP, p));	// crear la función que compara los conjuntos
+        }while(!comparePart(oldP, p));	// mientras no sean iguales
+        
+        totalStates_ = p.size();
+        Q_.clear();
+        for(partition_t::iterator it1 = p.begin(); it1 != p.end(); it1++){
+            bool acceptance;
+            for(setStates_t::iterator it2 = it1->begin(); it2 != it1->end(); it2++){
+                if(acceptance == it2->isAcceptance())
+                    acceptance = true;
+                State qAux(it2->begin()->getID(), acceptance);
+                qAux.addTrans(it2->begin());   // copia las transiciones del primer elemento del primer conjunto
+            }
+            Q_.insert(qAux);
+        }
     }
 
     bool Dfa::comparePart(partition_t P1, partition_t P2){
@@ -134,18 +149,17 @@ namespace CYA{
     }
 
 	partition_t Dfa::breaker(setStates_t G, char a, partition_t p){
-		partition_t T, Tp;
+        partition_t T;
+        setStates_t X;
 		for(partition_t::iterator itPart = p.begin(); itPart != p.end(); itPart++){	// *it = H
-			//hay que buscar estados de G, dentro de H cuya transición con 'a' vayan al estado que esté en H
-			setStates_t Gp = allStates2(G, a);
+			setStates_t Gp = allStates2(G, a);  // todos los estados de G que van con 'a'
 			for(setStates_t::iterator it1 = Gp.begin(); it1 != Gp.end(); it1++)
 				for(setStates_t::iterator it2 = itPart->begin(); it2 != itPart->end(); it2++)
                     if(*it1 == *it2)
-                        Tp;
-						//Tp.insert(*it1);
-		}
-		// esto no lo tengo muy claro
-		T = unionPart(T, Tp);
+                        X.insert(*it1);
+        }
+        
+		T.insert(X);
 		return T;
     }
 
@@ -170,20 +184,6 @@ namespace CYA{
 		// G' = {t(q0, a), t(q1, a), t(q2, a)...}
 		return Gp;
     }
-    
-
-    /*
-      std::ostream& Dfa::showDFA(std::ostream& os){
-        os << totalStates_ << std::endl;
-        os << start_ << std::endl;
-        for(setStates_t::iterator it = Q_.begin(); it != Q_.end(); it++){
-            os << it->getID() << ' ';
-            os << it->isAcceptance() << ' ';
-            it->showTrans(os);
-            os << std::endl;
-        } 
-        return os;
-    */
 
     void Dfa::exportDfa(const char* name){
         std::ofstream ofs(name, std::ostream::out);
@@ -191,10 +191,11 @@ namespace CYA{
         ofs << start_ << std::endl;
         for(setStates_t::iterator it = Q_.begin(); it != Q_.end(); it++){
             ofs << it->getID() << ' ';
-            ofs << it->isAcceptances() << ' ';
-            it->writeFS(ofs);
+            ofs << it->isAcceptance() << ' ';
+            State auxq = *it;
+            auxq.writeFS(ofs);
             ofs << std::endl;
         }
-        file.close();
+        ofs.close();
     }
 }

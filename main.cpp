@@ -7,12 +7,7 @@ using namespace CYA;
 void menu(void);
 
 int main(void){
-	//std::ifstream ifs("ejemplo.dfa", std::ifstream::in);
-	Dfa M(ifs);
-	M.putString(std::cin);
-	std::cout << M.accepted() << std::endl;
-	M.showStatesDeath(std::cout);
-	M.showDFA(std::cout);
+	menu();
 }
 
 void menu(void){
@@ -29,11 +24,13 @@ void menu(void){
 		std::cin >> option;
 		switch(option){
 			case 0: break;
-			case 1: std::cout << "Ingrese el nombre del fichero: ";
+			case 1: {
+					std::cout << "Ingrese el nombre del fichero: ";
 					std::string nombre;
 					std::cin >> nombre;
 					std::ifstream ifs(nombre.c_str(), std::ifstream::in);
 					M.openFile(ifs);
+			}
 					break;
 			case 2:	M.showDFA(std::cout);
 					break;
@@ -47,11 +44,13 @@ void menu(void){
 						std::cout << "La cadena no es aceptada" << std::endl;
 			case 5: M.minDfa();
 					break;
-			case 6: std::cout << "Introduzca nombre de archivo: "
+			case 6: {
+					std::cout << "Introduzca nombre de archivo: ";
 					std::string nombre;
 					std::cin >> nombre;
 					M.exportDfa(nombre.c_str());
 					break;
+			}
 			default: std::cout << "Opción incorrecta" << std::endl;
 		}
 	}while(option != 0);
