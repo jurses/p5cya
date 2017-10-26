@@ -96,25 +96,33 @@ namespace CYA{
 
 		partition_t p, oldP;
 		p.insert(noAcceptanceS);
-		p.insert(acceptanceS);
+        p.insert(acceptanceS);
 
 		do{
-			oldP = p;
-			p = createNewPartition(oldP);
+            oldP = p;
+            p = createNewPartition(oldP);
         }while(!comparePart(oldP, p));	// mientras no sean iguales
         
         totalStates_ = p.size();
         Q_.clear();
-        for(partition_t::iterator it1 = p.begin(); it1 != p.end(); it1++){
-            bool acceptance;
-            for(setStates_t::iterator it2 = it1->begin(); it2 != it1->end(); it2++){
-                if(acceptance == it2->isAcceptance())
-                    acceptance = true;
-                State qAux(it2->begin()->getID(), acceptance);
-                qAux.addTrans(it2->begin());   // copia las transiciones del primer elemento del primer conjunto
-            }
+        
+        int i = 0;
+        
+        for(partition_t::iterator it = p.begin(); it != p.end(); it++, i++){
+            int id = i;
+            bool acceptance = checkAcceptance(*it);
+            State qAux(i, acceptance);
+            qAux.setTrans(*(it->begin()));
             Q_.insert(qAux);
         }
+        totalStates_ = i;
+    }
+
+    bool Dfa::checkAcceptance(setStates_t Q){
+        for(setStates_t::iterator it = Q.begin(); it != Q.end(); it++)
+            if(it->isAcceptance())
+                return true;
+        return false;
     }
 
     bool Dfa::comparePart(partition_t P1, partition_t P2){
@@ -127,10 +135,28 @@ namespace CYA{
 		partition_t p;
 
 		for(partition_t::iterator it = oldP.begin(); it != oldP.end(); it++)
-			p = unionPart(p, descomp(*it, oldP));
-
+            p = unionPart(p, descomp(*it, oldP));
+        
 		return p;
-	};
+    };
+    
+    std::ostream& Dfa::showPartition(std::ostream& os, partition_t p){
+        os << '{';
+        for(partition_t::iterator it = p.begin(); it != p.end(); it++){
+            showSetStates(os, *it);
+            os << ", ";
+        }
+        os << '}';
+        return os;
+    }
+
+    std::ostream& Dfa::showSetStates(std::ostream& os, setStates_t Q){
+        os << '{';
+        for(setStates_t::iterator its = Q.begin(); its != Q.end(); its++)
+            os << its->getID() << ", ";
+        os << '}';
+        return os;
+    }
 
 	partition_t Dfa::descomp(setStates_t G, partition_t p){
 		partition_t T;
@@ -148,42 +174,46 @@ namespace CYA{
 		return T;
     }
 
-	partition_t Dfa::breaker(setStates_t G, char a, partition_t p){
-        partition_t T;
-        setStates_t X;
-		for(partition_t::iterator itPart = p.begin(); itPart != p.end(); itPart++){	// *it = H
-			setStates_t Gp = allStates2(G, a);  // todos los estados de G que van con 'a'
-			for(setStates_t::iterator it1 = Gp.begin(); it1 != Gp.end(); it1++)
-				for(setStates_t::iterator it2 = itPart->begin(); it2 != itPart->end(); it2++)
-                    if(*it1 == *it2)
-                        X.insert(*it1);
-        }
+    bool Dfa::isIn(int id, setStates_t Q){
+        for(setStates_t::iterator it = Q.begin(); it != Q.end(); it++)
+            if(id == it->getID())
+                return true;
         
-		T.insert(X);
+        return false;
+    }
+    // si existe 
+	partition_t Dfa::breaker(setStates_t G, char a, partition_t p){
+        partition_t T, Tp;
+        for(partition_t::iterator itp = p.begin(); H != itp.end(); H++){
+            setStates_t H = *itp;
+            showSetStates(std::cout, H);
+            Tp.clear();
+            setStates_t Gp;
+            for(setStates_t::iterator qit = G.begin(); qit != G.end(); qit++){
+                if(isIn(qit->getID(), H)){
+                    Gp.insert(*qit);   
+                    //insertar en Gp todos aquellos estados cuya transición con 'a' van a estados del cjt. H
+                }
+            }
+            Tp.insert(Gp);
+            T = unionPart(T, Tp);
+        }
+
 		return T;
     }
 
 	partition_t Dfa::unionPart(partition_t P1, partition_t P2){
 		partition_t P3;
-		partition_t::iterator it;
+        partition_t::iterator it;
 
 		for(it = P1.begin(); it != P1.end(); it++)
 			P3.insert(*it);
 
 		for(it = P2.begin(); it != P2.end(); it++)
-			P3.insert(*it);
-
+            P3.insert(*it);
+            
 		return P3;
 	}
-
-	setStates_t Dfa::allStates2(setStates_t G, char a){
-		setStates_t Gp;
-		for(setStates_t::iterator it = G.begin(); it != G.end(); it++)
-			Gp.insert(obtState(funcTrans(it->getID(), a)));
-
-		// G' = {t(q0, a), t(q1, a), t(q2, a)...}
-		return Gp;
-    }
 
     void Dfa::exportDfa(const char* name){
         std::ofstream ofs(name, std::ostream::out);

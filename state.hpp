@@ -90,7 +90,8 @@ namespace CYA{
 
 		std::ofstream& writeFS(std::ofstream&)const;
 
-		friend void State::addTrans(State);
+		void setTrans(State);
+		transS_t obtAdj(void);
 	};
 }
 

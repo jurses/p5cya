@@ -67,14 +67,6 @@ namespace CYA{
          * @return
          */
         partition_t unionPart(partition_t, partition_t);
-        
-        /**
-         * @brief
-         * @param
-         * @param
-         * @return
-         */
-        setStates_t allStates2(setStates_t, char);
 
         /**
          * @brief
@@ -83,6 +75,14 @@ namespace CYA{
          * @return
          */
         bool comparePart(partition_t, partition_t);
+
+        bool isIn(int, setStates_t);
+
+        bool checkAcceptance(setStates_t);
+
+        std::ostream& showPartition(std::ostream&, partition_t);
+        
+        std::ostream& showSetStates(std::ostream&, setStates_t);
 
         
     public:

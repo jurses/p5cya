@@ -65,7 +65,11 @@ namespace CYA{
 		return ofs;
 	}
 
-	void State::addTrans(State q){
-		adjacency_ = q.adjacency_;
+	void State::setTrans(State q){
+		adjacency_ = q.obtAdj();
+	}
+
+	transS_t State::obtAdj(void){
+		return adjacency_;
 	}
 }
