@@ -35,6 +35,7 @@ namespace CYA{
 		 * @param bool: si es de aceptación
 		 */
 		State(int, bool);   // id, acceptance
+		State();
 
 		/**
 		 * @return devuelve el atributo del identificador
@@ -80,6 +81,8 @@ namespace CYA{
 		 * @return valor booleano
 		 */
 		bool operator==(State)const;
+
+		State operator=(const State&);
 
 		/**
 		 * @brief nos manda un flujo mostrando todas las transiciones

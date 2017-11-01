@@ -5,6 +5,11 @@ namespace CYA{
 	id_(id),
 	acceptance_(acceptance)
 	{}
+
+	State::State():
+	id_(-1),
+	acceptance_(false)
+	{}
 	
 	void State::setAdj(char t, int q){
 		trans_t transAux;
@@ -71,5 +76,12 @@ namespace CYA{
 
 	transS_t State::obtAdj(void){
 		return adjacency_;
+	}
+
+	State State::operator=(const State& q){
+		id_ = q.id_;
+		acceptance_ = q.acceptance_;
+		adjacency_ = q.adjacency_;
+		return *this;
 	}
 }

@@ -87,35 +87,18 @@ namespace CYA{
     }
 
     void Dfa::minDfa(void){
-		setStates_t noAcceptanceS, acceptanceS;
-		for(setStates_t::iterator it = Q_.begin(); it != Q_.end(); it++)
-			if(it->isAcceptance())
-				acceptanceS.insert(*it);
-			else
-				noAcceptanceS.insert(*it);
-
-		partition_t p, oldP;
-		p.insert(noAcceptanceS);
-        p.insert(acceptanceS);
-
-		do{
-            oldP = p;
-            p = createNewPartition(oldP);
-        }while(!comparePart(oldP, p));	// mientras no sean iguales
-        
-        totalStates_ = p.size();
-        Q_.clear();
-        
-        int i = 0;
-        
-        for(partition_t::iterator it = p.begin(); it != p.end(); it++, i++){
-            int id = i;
-            bool acceptance = checkAcceptance(*it);
-            State qAux(i, acceptance);
-            qAux.setTrans(*(it->begin()));
-            Q_.insert(qAux);
-        }
-        totalStates_ = i;
+        partition_t PI, oldPI;
+        setStates_t F, NF;
+        for(setStates_t::iterator its = Q_.begin(); its != Q_.end(); its++)
+            if(its->isAcceptance())
+                F.insert(*its);
+            else
+                NF.insert(*its);
+        do{
+            oldPI = PI;
+            PI = createNewPartition(oldPI);
+        }while(!comparePart(PI, oldPI));
+        buildDfa(PI);
     }
 
     bool Dfa::checkAcceptance(setStates_t Q){
@@ -125,19 +108,19 @@ namespace CYA{
         return false;
     }
 
-    bool Dfa::comparePart(partition_t P1, partition_t P2){
+    bool Dfa::comparePart(partition_t P1, partition_t P2){  //return true if equal
         partition_t P3;
         P3 = unionPart(P1, P2);
         return (P3.size() == P1.size() && P3.size() == P2.size());
     }
 
-	partition_t Dfa::createNewPartition(partition_t oldP){
-		partition_t p;
+	partition_t Dfa::createNewPartition(partition_t oldPI){
+		partition_t PI;
 
-		for(partition_t::iterator it = oldP.begin(); it != oldP.end(); it++)
-            p = unionPart(p, descomp(*it, oldP));
+		for(partition_t::iterator it = oldPI.begin(); it != oldPI.end(); it++)
+            PI = unionPart(PI, descomp(*it, oldPI));
         
-		return p;
+		return PI;
     };
     
     std::ostream& Dfa::showPartition(std::ostream& os, partition_t p){
@@ -158,18 +141,17 @@ namespace CYA{
         return os;
     }
 
-	partition_t Dfa::descomp(setStates_t G, partition_t p){
-		partition_t T;
+	partition_t Dfa::descomp(setStates_t G, partition_t PI){
+		partition_t T, Tx, P;
 		T.insert(G);
 		std::set<char> sigmaS = sigma_.obtSet();
 		for(std::set<char>::iterator it1 = sigmaS.begin(); it1 != sigmaS.end(); it1++){	//iterador del alfabeto
-			partition_t k;	// se llama p, pero yo lo llamo k
-			for(partition_t::iterator it2 = T.begin(); it2 != T.end(); it2++){
-				partition_t Tp;	// T prima
-				Tp = (breaker(*it2, *it1, p));
-				k = unionPart(k, Tp);
-			}
-			T = k;
+            P.clear();
+            for(partition_t::iterator it2 = T.begin(); it2 != T.end(); it2++){
+                Tx = breaker(G, *it1, PI);
+                P = unionPart(P, Tx);
+            }
+            T = P;
 		}
 		return T;
     }
@@ -181,24 +163,26 @@ namespace CYA{
         
         return false;
     }
-    // si existe 
-	partition_t Dfa::breaker(setStates_t G, char a, partition_t p){
-        partition_t T, Tp;
-        for(partition_t::iterator itp = p.begin(); H != itp.end(); H++){
-            setStates_t H = *itp;
-            showSetStates(std::cout, H);
-            Tp.clear();
-            setStates_t Gp;
-            for(setStates_t::iterator qit = G.begin(); qit != G.end(); qit++){
-                if(isIn(qit->getID(), H)){
-                    Gp.insert(*qit);   
-                    //insertar en Gp todos aquellos estados cuya transición con 'a' van a estados del cjt. H
+
+	partition_t Dfa::breaker(setStates_t G, char a, partition_t PI){
+        partition_t T, auxP;
+        setStates_t H, auxS;
+        State qG, qH;
+        for(partition_t::iterator it1 = PI.begin(); it1 != PI.end(); it1++){
+            H = *it1;
+            for(setStates_t::iterator it2 = H.begin(); it2 != H.end(); it2++){
+                for(setStates_t::iterator it3 = G.begin(); it3 != G.end(); it3++){
+                    State qGH;
+                    qGH = obtState(funcTrans(it3->getID(), a));
+                    if(it2->getID() == qGH.getID())
+                        auxS.insert(*it2);
+                    auxP.insert(auxS);
+                    auxS.clear();
+                    T = unionPart(T, auxP);
+                    auxP.clear();
                 }
             }
-            Tp.insert(Gp);
-            T = unionPart(T, Tp);
         }
-
 		return T;
     }
 
@@ -227,5 +211,13 @@ namespace CYA{
             ofs << std::endl;
         }
         ofs.close();
+    }
+
+    void Dfa::buildDfa(partition_t P){
+        std::set<char> sigmaS = sigma_.obtSet();
+        for(std::set<char>::iterator it1 = sigmaS.begin(); it1 != sigmaS.end(); it1++)
+            for(partition_t::iterator it2 = P.begin(); it2 != P.end(); it2++){
+                for(setStates_t::iterator it3 = it2->begin(); it3 != it2)
+            }
     }
 }

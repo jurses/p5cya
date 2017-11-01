@@ -84,6 +84,8 @@ namespace CYA{
         
         std::ostream& showSetStates(std::ostream&, setStates_t);
 
+        void buildDfa(partition_t);
+
         
     public:
 
