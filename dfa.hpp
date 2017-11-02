@@ -78,6 +78,8 @@ namespace CYA{
 
         bool isIn(int, setStates_t);
 
+        bool isIn(int, partition_t);
+
         bool checkAcceptance(setStates_t);
 
         std::ostream& showPartition(std::ostream&, partition_t);
@@ -86,7 +88,12 @@ namespace CYA{
 
         void buildDfa(partition_t);
 
-        
+        State giveStateMatch(setStates_t, partition_t);
+
+        setStates_t simpTrans(setStates_t);
+
+        void eraseAllExcept(State, setStates_t);
+                
     public:
 
         /**

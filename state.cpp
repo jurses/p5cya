@@ -84,4 +84,12 @@ namespace CYA{
 		adjacency_ = q.adjacency_;
 		return *this;
 	}
+
+	void State::setId(int id){
+		id_ = id;
+	}
+
+	void State::setAcceptance(bool acceptance){
+		acceptance_ = acceptance;
+	}
 }

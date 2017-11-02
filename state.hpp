@@ -95,6 +95,10 @@ namespace CYA{
 
 		void setTrans(State);
 		transS_t obtAdj(void);
+
+		void setId(int);
+
+		void setAcceptance(bool);
 	};
 }
 

@@ -164,6 +164,12 @@ namespace CYA{
         return false;
     }
 
+    bool Dfa::isIn(int id, partition_t P){
+        for(partition_t::iterator it1 = P.begin(); it1 != P.end(); it1++)
+            if(isIn(id, *it1))
+                return true;
+    }
+
 	partition_t Dfa::breaker(setStates_t G, char a, partition_t PI){
         partition_t T, auxP;
         setStates_t H, auxS;
@@ -214,10 +220,29 @@ namespace CYA{
     }
 
     void Dfa::buildDfa(partition_t P){
+        setStates_t aux;
+        partition_t Pp;
+        for(partition_t::iterator it1 = P.begin(); it1 != P.end(); it1++){
+            while(it1->size() > 1)
+                Pp.insert(simpTrans(*it1));
+        }
+                    
+    }
+
+    setStates_t Dfa::simpTrans(setStates_t Q){
+        setStates_t Qcopy;
+        Qcopy = Q;
         std::set<char> sigmaS = sigma_.obtSet();
-        for(std::set<char>::iterator it1 = sigmaS.begin(); it1 != sigmaS.end(); it1++)
-            for(partition_t::iterator it2 = P.begin(); it2 != P.end(); it2++){
-                for(setStates_t::iterator it3 = it2->begin(); it3 != it2)
-            }
+		for(std::set<char>::iterator it1 = sigmaS.begin(); it1 != sigmaS.end(); it1++){
+            for(setStates_t::iterator it2 = Q.begin(); it2 != Q.end(); it2++)
+                if(isIn(obtState(funcTrans(it2->getID(), *it1)).getID(), Q))
+                    Qcopy.erase(*it2);
+                else{
+                    setStates_t aux;
+                    aux.insert(*it2);
+                    Qcopy = aux;
+                }
+        }
+        return Qcopy;
     }
 }
