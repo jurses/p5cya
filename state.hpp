@@ -94,6 +94,7 @@ namespace CYA{
 		std::ofstream& writeFS(std::ofstream&)const;
 
 		void setTrans(State);
+		
 		transS_t obtAdj(void);
 
 		void setId(int);

@@ -88,11 +88,7 @@ namespace CYA{
 
         void buildDfa(partition_t);
 
-        State giveStateMatch(setStates_t, partition_t);
-
-        setStates_t simpTrans(setStates_t);
-
-        void eraseAllExcept(State, setStates_t);
+        State obtMainS(setStates_t);
                 
     public:
 

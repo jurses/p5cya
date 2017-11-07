@@ -220,29 +220,40 @@ namespace CYA{
     }
 
     void Dfa::buildDfa(partition_t P){
-        setStates_t aux;
-        partition_t Pp;
-        for(partition_t::iterator it1 = P.begin(); it1 != P.end(); it1++){
-            while(it1->size() > 1)
-                Pp.insert(simpTrans(*it1));
+        std::set<std::pair<State, setStates_t>> oldNewS;
+        int i = 0;
+        int newStart = -1;
+        for(partition_t::iterator itP = P.begin(); itP != P.end(); itP++){
+            State auxS(i++, checkAcceptance(*itP));
+            setStates_t auxSetS;
+
+            for(setStates_t::iterator itS = itP->begin(); itS != itP->end(); itS++)
+                auxSetS.insert(*itS);
+
+
+            auxS.setTrans(obtMainS(auxSetS));
+            
+            std::pair<State, setStates_t> auxPair;
+            auxPair.first = auxS;
+            auxPair.second = auxSetS;
+            oldNewS.insert(auxPair);
         }
-                    
     }
 
-    setStates_t Dfa::simpTrans(setStates_t Q){
-        setStates_t Qcopy;
-        Qcopy = Q;
-        std::set<char> sigmaS = sigma_.obtSet();
-		for(std::set<char>::iterator it1 = sigmaS.begin(); it1 != sigmaS.end(); it1++){
-            for(setStates_t::iterator it2 = Q.begin(); it2 != Q.end(); it2++)
-                if(isIn(obtState(funcTrans(it2->getID(), *it1)).getID(), Q))
-                    Qcopy.erase(*it2);
-                else{
-                    setStates_t aux;
-                    aux.insert(*it2);
-                    Qcopy = aux;
-                }
+    /* esta función devuelve el estado con la transición siguiente fuera del conjunto
+    de estado Q, si no devuelve el primero del conjunto de estado Q
+    */
+    State Dfa::obtMainS(setStates_t Q){
+        std::set<char> alphabet;
+        State nq;
+        alphabet = sigma_.obtSet();
+        for(std::set<char>::iterator itA = alphabet.begin(); itA != alphabet.end(); itA++){
+            for(setStates_t::iterator itS = Q.begin(); itS != Q.end(); itS++){
+                nq = obtState(funcTrans(itS->getID(), *itA));
+                if(!isIn(nq.getID(), Q))
+                    return nq;
+            }
         }
-        return Qcopy;
+        return *Q.begin();
     }
 }
