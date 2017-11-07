@@ -3,7 +3,6 @@
 typedef std::set<CYA::State> setStates_t;
 
 namespace CYA{
-
     Dfa::Dfa(std::ifstream& ifs){
         openFile(ifs);
     }
@@ -264,5 +263,18 @@ namespace CYA{
                     return nq;
             }
         return nq;  // cualquier estado es válido, cojo el primero del cjto.
+    }
+
+    std::ostream& operator<<(std::ostream& os, const Dfa& dfa){
+        os << dfa.totalStates_ << std::endl;
+        os << dfa.start_ << std::endl;
+        for(setStates_t::iterator it = dfa.Q_.begin(); it != dfa.Q_.end(); it++){
+            os << it->getID() << ' ';
+            os << it->isAcceptance() << ' ';
+            State auxq = *it;
+            auxq.showTrans(os);
+            os << std::endl;
+        }
+        return os;
     }
 }

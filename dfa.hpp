@@ -139,6 +139,8 @@ namespace CYA{
         bool accepted(void);
 
         void exportDfa(const char*);
+
+        friend std::ostream& operator<<(std::ostream&, const Dfa&);
     };
 }
 
