@@ -220,40 +220,49 @@ namespace CYA{
     }
 
     void Dfa::buildDfa(partition_t P){
-        std::set<std::pair<State, setStates_t>> oldNewS;
+        std::set<std::pair<State, setStates_t>> specialPart;
+        std::pair<State, setStates_t> auxPair;
+        setStates_t finalSet;
         int i = 0;
         int newStart = -1;
+        std::set<char> alphabet = sigma_.obtSet();
         for(partition_t::iterator itP = P.begin(); itP != P.end(); itP++){
             State auxS(i++, checkAcceptance(*itP));
-            setStates_t auxSetS;
-
-            for(setStates_t::iterator itS = itP->begin(); itS != itP->end(); itS++)
-                auxSetS.insert(*itS);
-
-
-            auxS.setTrans(obtMainS(auxSetS));
-            
-            std::pair<State, setStates_t> auxPair;
             auxPair.first = auxS;
+
+            setStates_t auxSetS;
+            for(setStates_t::iterator itS = itP->begin(); itS != itP->end(); itS++){
+                auxSetS.insert(*itS);
+                if(itS->getID() == start_)
+                    newStart = i;
+            }
+            
             auxPair.second = auxSetS;
-            oldNewS.insert(auxPair);
+            specialPart.insert(auxPair);
         }
+        
+        for(std::set<std::pair<State, setStates_t>>::iterator it = specialPart.begin(); it != specialPart.end(); it++){
+            for(std::set<char>::iterator itAlpha = alphabet.begin(); itAlpha != alphabet.end(); itAlpha++){
+                State q;
+                q = obtMainS(it->second, *itAlpha);
+                finalSet.insert(q);
+            }
+        }
+
+        // Y si todo va bien...
+        Q_ = finalSet;
     }
 
     /* esta función devuelve el estado con la transición siguiente fuera del conjunto
     de estado Q, si no devuelve el primero del conjunto de estado Q
     */
-    State Dfa::obtMainS(setStates_t Q){
-        std::set<char> alphabet;
-        State nq;
-        alphabet = sigma_.obtSet();
-        for(std::set<char>::iterator itA = alphabet.begin(); itA != alphabet.end(); itA++){
+    State Dfa::obtMainS(setStates_t Q, char a){
+        State nq = *Q.begin();
             for(setStates_t::iterator itS = Q.begin(); itS != Q.end(); itS++){
-                nq = obtState(funcTrans(itS->getID(), *itA));
+                nq = obtState(funcTrans(itS->getID(), a));
                 if(!isIn(nq.getID(), Q))
                     return nq;
             }
-        }
-        return *Q.begin();
+        return nq;  // cualquier estado es válido, cojo el primero del cjto.
     }
 }

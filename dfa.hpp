@@ -88,7 +88,7 @@ namespace CYA{
 
         void buildDfa(partition_t);
 
-        State obtMainS(setStates_t);
+        State obtMainS(setStates_t, char);
                 
     public:
 
