@@ -9,6 +9,7 @@
 #include <ostream>
 #include <fstream>
 #include <utility>
+#include <string>
 
 //finite states ID set, conjuntos id de estados finitos
 typedef std::set<int> FSIDS_t;
@@ -97,9 +98,13 @@ namespace CYA{
 		
 		transS_t obtAdj(void);
 
+		int obtNTrans(void);
+
 		void setId(int);
 
 		void setAcceptance(bool);
+
+		std::string obtStrTrans(void);
 	};
 }
 

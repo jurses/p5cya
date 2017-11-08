@@ -92,4 +92,20 @@ namespace CYA{
 	void State::setAcceptance(bool acceptance){
 		acceptance_ = acceptance;
 	}
+
+	int State::obtNTrans(void){
+		return adjacency_.size();
+	}
+
+	std::string State::obtStrTrans(void){
+		std::string data;
+		for(transS_t::iterator it = adjacency_.begin(); it != adjacency_.end(); it++){
+			data.append(' ');
+			data.append(it->first);
+			data.append(' ');
+			int nextS = obtainFirst(it->second);
+			data.append(std::to_string(nextS));
+		}
+		return data;
+	}
 }

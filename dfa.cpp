@@ -227,10 +227,31 @@ namespace CYA{
             data.append(' ');
             data.append(*it);
         }
+
         data.append(' ');
         data.append(std::to_string(totalStates_));
         data.append(' ');
         data.append(std::to_string(start_));
+
+        for(setStates_t::iterator it = setStates_t.begin(); it != setStates_t.end(); it++){
+            data.append(' ');
+            data.append(std::to_string(it->getID()));
+            data.append(' ');
+            data.append(std::to_string(it->obtNTrans());
+            data.append(' ');
+            data.append(it->obtStrTrans());
+        }
+
+        return data;
+        // modelo de lo que puede recibir
+        // no hay salto de líneas, están separados por espacios
+        /*
+        alphabet.size()
+        a b c d ...
+        estados totales #x
+        estado inicial
+        id estado, nº trans, trans(char, sig_estado) ...
+        */
     }
 
     void Dfa::buildDfa(partition_t P){
