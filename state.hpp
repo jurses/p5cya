@@ -5,7 +5,9 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include <sstream>
 #include <set>
+#include <cstdio>
 #include <ostream>
 #include <fstream>
 #include <utility>
@@ -98,13 +100,13 @@ namespace CYA{
 		
 		transS_t obtAdj(void);
 
-		int obtNTrans(void);
+		int obtNTrans(void)const;
 
 		void setId(int);
 
 		void setAcceptance(bool);
 
-		std::string obtStrTrans(void);
+		std::string obtStrTrans(void)const;
 	};
 }
 

@@ -6,24 +6,23 @@
 #include <set>
 #include <vector>
 #include <utility>
+#include <string>
+#include <sstream>
 
-typedef std::set<Symbol> setSymbol_t;
-typedef std::vector<Symbol> vecSymbol_t;    //el vector está guay porque mantiene el orden por símbolos ingresados
-typedef std::pair<Symbol, std::set<vecSymbol_t>> production_t;
-typedef std::set<production_t> setProd_t;   //conjunto de producciones
+typedef std::set<CYA::Symbol> setSymbol_t;
 
 namespace CYA{
     class Glr{
     public:
         Glr();
+        void openG(std::string);
         
     private:
         bool linR_; // lineal por la derecha -> en este sentido
         Alphabet sigma_;
-        setSymbol_t snt_;
-        setSymbol_t st_;
+        setSymbol_t snt_;   // no terminales
+        setSymbol_t st_;    // terminales
         Symbol axiom_;
-        setProd_t rules_;
     };
 }
 

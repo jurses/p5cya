@@ -93,19 +93,22 @@ namespace CYA{
 		acceptance_ = acceptance;
 	}
 
-	int State::obtNTrans(void){
+	int State::obtNTrans(void)const{
 		return adjacency_.size();
 	}
 
-	std::string State::obtStrTrans(void){
+	std::string State::obtStrTrans(void)const{
 		std::string data;
+		std::stringstream ss;
+		char buffer[256];
 		for(transS_t::iterator it = adjacency_.begin(); it != adjacency_.end(); it++){
-			data.append(' ');
-			data.append(it->first);
-			data.append(' ');
-			int nextS = obtainFirst(it->second);
-			data.append(std::to_string(nextS));
+			ss << ' ';
+			ss << it->first;
+			ss << ' ';
+			sprintf(buffer, "%d", obtainFirst(it->second));
+			ss << buffer;
 		}
+		ss >> data;
 		return data;
 	}
 }

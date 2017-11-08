@@ -221,26 +221,40 @@ namespace CYA{
 
     std::string Dfa::exportDfa(void){
         std::string data;
+        std::stringstream ss;
+        char buffer[256];
         std::set<char> alphabet = sigma_.obtSet();
-        data.append(std::to_string(alphabet.size()));
+
+        sprintf(buffer, "%lu", alphabet.size());
+
+        ss << buffer;
+
         for(std::set<char>::iterator it = alphabet.begin(); it != alphabet.end(); it++){
-            data.append(' ');
-            data.append(*it);
+            ss << ' ';
+            ss << *it;
         }
 
-        data.append(' ');
-        data.append(std::to_string(totalStates_));
-        data.append(' ');
-        data.append(std::to_string(start_));
+        ss << ' ';
+        sprintf(buffer, "%d", totalStates_);
+        ss << buffer;
+        ss << ' ';
+        sprintf(buffer, "%d", start_);
+        ss << buffer;
 
-        for(setStates_t::iterator it = setStates_t.begin(); it != setStates_t.end(); it++){
-            data.append(' ');
-            data.append(std::to_string(it->getID()));
-            data.append(' ');
-            data.append(std::to_string(it->obtNTrans());
-            data.append(' ');
-            data.append(it->obtStrTrans());
+        for(setStates_t::iterator it = Q_.begin(); it != Q_.end(); it++){
+            ss << ' ';
+            sprintf(buffer, "%d", it->getID());
+            ss << buffer;
+            ss << ' ';
+            sprintf(buffer, "%d", it->isAcceptance());
+            ss << buffer;
+            ss << ' ';
+            sprintf(buffer, "%d", it->obtNTrans());
+            ss << buffer;
+            ss << ' ';
+            ss << it->obtStrTrans();
         }
+        ss >> data;
 
         return data;
         // modelo de lo que puede recibir

@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <cstdio>
 #include <iomanip>
 #include "state.hpp"
 #include "word.hpp"
