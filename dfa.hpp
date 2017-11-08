@@ -140,6 +140,8 @@ namespace CYA{
 
         void exportDfa(const char*);
 
+        std::string exportDfa(void);
+
         friend std::ostream& operator<<(std::ostream&, const Dfa&);
     };
 }

@@ -1,6 +1,7 @@
 #include "dfa.hpp"
 
 typedef std::set<CYA::State> setStates_t;
+typedef std::set<setStates_t> partition_t;
 
 namespace CYA{
     Dfa::Dfa(std::ifstream& ifs){
@@ -216,6 +217,20 @@ namespace CYA{
             ofs << std::endl;
         }
         ofs.close();
+    }
+
+    std::string Dfa::exportDfa(void){
+        std::string data;
+        std::set<char> alphabet = sigma_.obtSet();
+        data.append(std::to_string(alphabet.size()));
+        for(std::set<char>::iterator it = alphabet.begin(); it != alphabet.end(); it++){
+            data.append(' ');
+            data.append(*it);
+        }
+        data.append(' ');
+        data.append(std::to_string(totalStates_));
+        data.append(' ');
+        data.append(std::to_string(start_));
     }
 
     void Dfa::buildDfa(partition_t P){

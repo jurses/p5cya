@@ -16,6 +16,7 @@ namespace CYA{
     class Glr{
     public:
         Glr();
+        
     private:
         bool linR_; // lineal por la derecha -> en este sentido
         Alphabet sigma_;
