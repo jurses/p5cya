@@ -5,6 +5,29 @@ namespace CYA{
     linR_(true){
     }
     
+    void Glr::genFile(std::string name){
+      std::ofstream ofs(name.c_str(), std::ofstream:out);
+      ofs << st_.size();
+      ofs << std::endl;
+      for(setSymbol_t::iterator it = st_.begin(); it != st_.end(); it++){
+	ofs << *it;
+	ofs << ' ';
+      }
+      ofs << std::endl;
+      ofs << snt_.size();
+      for(setSymbol_t::iterator it = snt_.begin(); it != snt_.end(); it++){
+	ofs << *it;
+	ofs << ' ';
+      }
+      ofs << axiom_.showProd();
+      ofs << std::endl;
+      for(setSymbol_t::iterator it = snt_.begin(); it != snt_.end(); it++){
+	if(it->symbol != axiom_){
+	  ofs << it->showProd();
+	  ofs << std::endl;
+      }
+    }
+    
     void Glr::openG(std::string input){
         std::stringstream ss;
         int terminal, total, initial, id, nprod;

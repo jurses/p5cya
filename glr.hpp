@@ -8,6 +8,7 @@
 #include <utility>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 typedef std::set<CYA::Symbol> setSymbol_t;
 
@@ -16,6 +17,7 @@ namespace CYA{
     public:
         Glr();
         void openG(std::string);
+	void genFile();
         
     private:
         bool linR_; // lineal por la derecha -> en este sentido

@@ -30,4 +30,22 @@ namespace CYA{
         prod.second = '~';
         prods_.insert(prod);
     }
+    
+    char Symbol::obtSymbol(void)const{
+      return symbol_;
+    }
+    
+    std::string showProd(void)const{
+      std::string strProd;
+      std::stringstream ss;
+      ss << *prods_.begin();
+      for(setProd_t::iterator it = prods_.begin() + 1; it != prods_.end(); it++){
+	ss << '|';
+	ss << ' ';
+	ss << prods_.first;
+	ss << prods_.second;
+      }
+      ss >> strProd;
+      return strProd;
+    }
 }
