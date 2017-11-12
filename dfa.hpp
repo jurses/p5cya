@@ -82,6 +82,8 @@ namespace CYA{
 
         bool isIn(int, partition_t);
 
+        bool exist(int, char, setStates_t);
+
         bool checkAcceptance(setStates_t);
 
         std::ostream& showPartition(std::ostream&, partition_t);

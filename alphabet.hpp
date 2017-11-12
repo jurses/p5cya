@@ -3,6 +3,7 @@
 
 #include <set>
 #include <cassert>
+#include <iostream>
 #include <fstream>
 
 namespace CYA{

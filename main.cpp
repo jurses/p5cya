@@ -61,7 +61,7 @@ void menu(void){
 				std::string nombre;
 				std::cout << "Introduzca nombre de archivo: ";
 				std::cin >> nombre;
-				G.genFile();
+				G.genFile(nombre);
 				break;
 			}
 			default: std::cout << "Opción incorrecta" << std::endl;

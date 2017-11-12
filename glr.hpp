@@ -17,7 +17,7 @@ namespace CYA{
     public:
         Glr();
         void openG(std::string);
-	void genFile();
+	    void genFile(std::string);
         
     private:
         bool linR_; // lineal por la derecha -> en este sentido

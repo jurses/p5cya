@@ -25,7 +25,8 @@ namespace CYA{
         Symbol& operator=(const Symbol&);
         void setProd(char, char);
         void setAccept(void);
-	std::string showProd(void)const;
+	    std::string showProd(void)const;
+        bool operator==(const Symbol&)const;
     };
 }
 
