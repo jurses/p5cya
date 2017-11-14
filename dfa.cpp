@@ -175,10 +175,6 @@ namespace CYA{
     }
 
 	partition_t Dfa::breaker(setStates_t G, char a, partition_t PI){
-		showSetStates(std::cout, G);
-		std::cout << std::endl;
-		showPartition(std::cout, PI);
-		std::cout << std::endl;
         partition_t T, auxP;
         setStates_t H, auxS;
         State qG, qH;
@@ -212,7 +208,11 @@ namespace CYA{
 	}
 
     bool Dfa::exist(int id, char a, setStates_t Q){
-        
+        State q = obtState(id);
+        for(setStates_t::iterator it = Q.begin(); it != Q.end(); it++)
+            if(it->getID() == q.getNextS(a))
+                return true;
+        return false;
     }
 
     void Dfa::exportDfa(const char* name){
@@ -267,15 +267,6 @@ namespace CYA{
         ss >> data;
 
         return data;
-        // modelo de lo que puede recibir
-        // no hay salto de líneas, están separados por espacios
-        /*
-        alphabet.size()
-        a b c d ...
-        estados totales #x
-        estado inicial
-        id estado, nº trans, trans(char, sig_estado) ...
-        */
     }
 
     void Dfa::buildDfa(partition_t P){
