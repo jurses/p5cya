@@ -1,0 +1,9 @@
+# ignora todo
+*
+
+# excepto
+!*.*pp
+!*.dfa
+!*.nfa
+!*.abc
+!.gitignore
