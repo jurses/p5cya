@@ -24,7 +24,7 @@ namespace CYA{
 		return *this;
 	}
 
-	void Alphabet::insert(const char c){
+	void Alphabet::insert(char c){
 		setAlphab_.insert(c);
 	}
 

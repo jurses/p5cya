@@ -35,17 +35,22 @@ namespace CYA{
       return symbol_;
     }
     
-    std::string showProd(void)const{
-      std::string strProd;
-      std::stringstream ss;
-      ss << *prods_.begin();
-      for(setProd_t::iterator it = prods_.begin() + 1; it != prods_.end(); it++){
-	ss << '|';
-	ss << ' ';
-	ss << prods_.first;
-	ss << prods_.second;
-      }
-      ss >> strProd;
-      return strProd;
+    std::string Symbol::showProd(void)const{
+        std::string strProd;
+        std::stringstream ss;
+        ss << prods_.begin()->first;
+        ss << prods_.begin()->second;
+        for(setProd_t::iterator it = ++prods_.begin(); it != prods_.end(); it++){
+            ss << '|';
+            ss << ' ';
+            ss << it->first;
+            ss << it->second;
+        }
+        ss >> strProd;
+        return strProd;
+    }
+
+    bool Symbol::operator==(const Symbol& s)const{
+        return symbol_ == s.symbol_;
     }
 }
