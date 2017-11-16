@@ -16,9 +16,10 @@ namespace CYA{
         setProd_t prods_;
         bool terminal_;
         char symbol_;
+        
     public:
         Symbol();
-        Symbol(bool, char); //es terminal, simbolo representante
+        Symbol(bool, char);
         bool isTerminal(void);
         char obtSymbol(void)const;
         bool operator<(const Symbol&)const;

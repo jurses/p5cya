@@ -97,10 +97,13 @@ namespace CYA{
                 NF.insert(*its);
         PI.insert(F);
         PI.insert(NF);
+
         do{
             oldPI = PI;
             PI = createNewPartition(oldPI);
         }while(!comparePart(PI, oldPI));
+        showPartition(std::cout, PI);
+        std::cout << std::endl;
         buildDfa(PI);
     }
 
@@ -120,8 +123,9 @@ namespace CYA{
 	partition_t Dfa::createNewPartition(partition_t oldPI){
 		partition_t PI;
 
-		for(partition_t::iterator it = oldPI.begin(); it != oldPI.end(); it++)
+		for(partition_t::iterator it = oldPI.begin(); it != oldPI.end(); it++){
             PI = unionPart(PI, descomp(*it, oldPI));
+        }
         
 		return PI;
     };
@@ -181,17 +185,21 @@ namespace CYA{
         for(partition_t::iterator it1 = PI.begin(); it1 != PI.end(); it1++){
             H = *it1;
             for(setStates_t::iterator it2 = H.begin(); it2 != H.end(); it2++){
-               for(setStates_t::iterator it3 = G.begin(); it3 != G.end(); it3++){
-					if(exist(it3->getID(), a, H))
-						auxS.insert(*it3);
-			   }
-			   auxP.insert(auxS);
-			   T = unionPart(T, auxP);
-			   auxP.clear();
-			   auxS.clear();
+                for(setStates_t::iterator it3 = G.begin(); it3 != G.end(); it3++){
+                    if(exist(it3->getID(), a, H))
+                       auxS.insert(*it3);
+                }
+            if(!auxS.empty())
+                auxP.insert(auxS);
+
+            if(!auxP.empty())
+                T = unionPart(T, auxP);
+
+            auxP.clear();
+            auxS.clear();
             }
         }
-		return T;
+        return T;
     }
 
 	partition_t Dfa::unionPart(partition_t P1, partition_t P2){
@@ -203,7 +211,7 @@ namespace CYA{
 
 		for(it = P2.begin(); it != P2.end(); it++)
             P3.insert(*it);
-            
+
 		return P3;
 	}
 
@@ -272,12 +280,14 @@ namespace CYA{
     void Dfa::buildDfa(partition_t P){
         std::set<std::pair<State, setStates_t>> specialPart;
         std::pair<State, setStates_t> auxPair;
+        totalStates_ = P.size();
         setStates_t finalSet;
         int i = 0;
         int newStart = -1;
         std::set<char> alphabet = sigma_.obtSet();
         for(partition_t::iterator itP = P.begin(); itP != P.end(); itP++){
             State auxS(i++, checkAcceptance(*itP));
+            std::cout << auxS.getID() << std::endl;
             auxPair.first = auxS;
 
             setStates_t auxSetS;

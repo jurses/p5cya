@@ -2,6 +2,7 @@
 
 namespace CYA{
     Symbol::Symbol(){}
+
     Symbol::Symbol(bool isTerm, char rep):
     symbol_(rep),
     terminal_(isTerm)
